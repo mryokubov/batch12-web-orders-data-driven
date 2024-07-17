@@ -1,9 +1,11 @@
 package com.techcenture.e2e;
 
+import com.github.javafaker.Faker;
 import com.techcenture.base.BaseTest;
 import com.techcenture.pages.AllOrdersPage;
 import com.techcenture.pages.LoginPage;
 import com.techcenture.pages.OrderPage;
+import com.techcenture.utils.CommonUtils;
 import org.testng.annotations.Test;
 
 public class PlaceOrderTests extends BaseTest {
@@ -23,18 +25,38 @@ public class PlaceOrderTests extends BaseTest {
 
         OrderPage orderPage = new OrderPage(driver);
 
-        orderPage.enterProductInformation("ScreenSaver", 34);
+        String[] products = {"MyMoney", "FamilyAlbum", "ScreenSaver"};
+        Integer randomIndex = faker.random().nextInt(0, 2);
+
+        String randomProduct = products[randomIndex];
+        int randomQuantity = faker.random().nextInt(1, 50);
+
+        orderPage.enterProductInformation(randomProduct, randomQuantity);
 
         orderPage.clickCalculateBtn();
         orderPage.verifyCalculation();
 
-        orderPage.enterAddressInformation("Kevin Lee", "123 main street", "Mclean", "VA", "22102");
+        String fullName = faker.name().fullName();
+        String streetAddress = faker.address().streetAddress();
+        String cityName = faker.address().cityName();
+        String state = faker.address().stateAbbr();
+        String zip = faker.address().zipCode().substring(0, 5);
 
-        orderPage.enterPaymentInformation("Visa", "4358973459834", "12/27");
+        orderPage.enterAddressInformation(fullName, streetAddress, cityName, state, zip);
+
+        String[] cards = {"Visa", "MasterCard", "American Express"};
+        randomIndex = faker.random().nextInt(0, 2);
+
+        String randomCard = cards[randomIndex];
+
+        String cardNumber = CommonUtils.randomDigits(15);
+
+        String expDate = CommonUtils.generateRandomExpirationDate();
+
+        orderPage.enterPaymentInformation(randomCard, cardNumber, expDate);
 
         orderPage.clickProcessBtn();
     }
 
-
-
 }
+

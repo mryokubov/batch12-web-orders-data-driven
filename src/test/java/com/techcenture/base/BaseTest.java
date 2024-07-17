@@ -10,7 +10,7 @@ import org.testng.annotations.BeforeMethod;
 public abstract class BaseTest {
 
     protected static WebDriver driver;
-    Faker faker;
+    protected Faker faker;
 
     @BeforeMethod
     public void beforeMethod(){
