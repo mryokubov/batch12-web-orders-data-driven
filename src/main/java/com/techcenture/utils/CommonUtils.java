@@ -1,7 +1,5 @@
 package com.techcenture.utils;
 
-import com.github.javafaker.Faker;
-
 import java.time.YearMonth;
 import java.util.Random;
 
@@ -9,7 +7,6 @@ public class CommonUtils {
 
     private CommonUtils() {
     }
-
 
     public static String randomDigits(int quantity) {
         String digits = "1234567890";
