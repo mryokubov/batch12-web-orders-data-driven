@@ -30,7 +30,9 @@ public class PlaceOrderTests extends BaseTest {
 
         orderPage.enterAddressInformation("Kevin Lee", "123 main street", "Mclean", "VA", "22102");
 
+        orderPage.enterPaymentInformation("Visa", "4358973459834", "12/27");
 
+        orderPage.clickProcessBtn();
     }
 
 

@@ -1,5 +1,6 @@
 package com.techcenture.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -95,4 +96,22 @@ public class OrderPage extends BasePage{
         stateInput.sendKeys(state);
         zipInput.sendKeys(zip);
     }
+
+    public void enterPaymentInformation(String cardName, String cardNumber, String expDate) {
+        WebElement card = driver.findElement(By.xpath("//input[@value='" + cardName + "']"));
+        card.click();
+        cardNumberInput.sendKeys(cardName);
+        exprDateInput.sendKeys(expDate);
+    }
+
+    public void clickProcessBtn(){
+        processBtn.click();
+        verifySuccessOrderMessage();
+    }
+
+
+    private void verifySuccessOrderMessage(){
+        Assert.assertTrue(orderCreatedSuccessMsg.isDisplayed());
+    }
+
 }
