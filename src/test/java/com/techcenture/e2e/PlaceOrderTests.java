@@ -1,17 +1,19 @@
 package com.techcenture.e2e;
 
-import com.github.javafaker.Faker;
 import com.techcenture.base.BaseTest;
 import com.techcenture.pages.AllOrdersPage;
 import com.techcenture.pages.LoginPage;
 import com.techcenture.pages.OrderPage;
-import com.techcenture.utils.CommonUtils;
+import com.techcenture.utils.ExcelReader;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.util.Map;
 
 public class PlaceOrderTests extends BaseTest {
 
-    @Test
-    public void placeOrderTest(){
+    @Test(dataProvider = "orders")
+    public void placeOrderTest(Map<String,String> data){
 
         LoginPage loginPage = new LoginPage(driver);
         loginPage.login("Tester", "test");
@@ -25,37 +27,23 @@ public class PlaceOrderTests extends BaseTest {
 
         OrderPage orderPage = new OrderPage(driver);
 
-        String[] products = {"MyMoney", "FamilyAlbum", "ScreenSaver"};
-        Integer randomIndex = faker.random().nextInt(0, 2);
-
-        String randomProduct = products[randomIndex];
-        int randomQuantity = faker.random().nextInt(1, 50);
-
-        orderPage.enterProductInformation(randomProduct, randomQuantity);
+        orderPage.enterProductInformation(data);
 
         orderPage.clickCalculateBtn();
         orderPage.verifyCalculation();
 
-        String fullName = faker.name().fullName();
-        String streetAddress = faker.address().streetAddress();
-        String cityName = faker.address().cityName();
-        String state = faker.address().stateAbbr();
-        String zip = faker.address().zipCode().substring(0, 5);
+        orderPage.enterAddressInformation(data);
 
-        orderPage.enterAddressInformation(fullName, streetAddress, cityName, state, zip);
-
-        String[] cards = {"Visa", "MasterCard", "American Express"};
-        randomIndex = faker.random().nextInt(0, 2);
-
-        String randomCard = cards[randomIndex];
-
-        String cardNumber = CommonUtils.randomDigits(15);
-
-        String expDate = CommonUtils.generateRandomExpirationDate();
-
-        orderPage.enterPaymentInformation(randomCard, cardNumber, expDate);
+        orderPage.enterPaymentInformation(data);
 
         orderPage.clickProcessBtn();
+    }
+
+
+    @DataProvider(name = "orders")
+    public Object[][] getData() {
+        ExcelReader reader = new ExcelReader("src/main/resources/test_data/Test_Data.xlsx", "orders");
+        return reader.getData();
     }
 
 

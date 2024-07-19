@@ -22,7 +22,7 @@ public abstract class BaseTest {
 
     @AfterMethod
     public void afterMethod(){
-        Driver.quitDriver();
-        driver = null;
+//        Driver.quitDriver();
+//        driver = null;
     }
 }

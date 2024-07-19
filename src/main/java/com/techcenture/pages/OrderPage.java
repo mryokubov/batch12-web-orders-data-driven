@@ -7,6 +7,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 
+import java.util.Map;
+
 public class OrderPage extends BasePage{
 
     public OrderPage(WebDriver driver) {
@@ -59,10 +61,10 @@ public class OrderPage extends BasePage{
     protected  WebElement orderCreatedSuccessMsg;
 
 
-    public void enterProductInformation(String productName, int quantity) {
+    public void enterProductInformation(Map<String,String> data) {
         Select productSelect = new Select(productDropDown);
-        productSelect.selectByValue(productName);
-        quantityInput.sendKeys( String.valueOf(quantity));
+        productSelect.selectByValue(data.get("product_name"));
+        quantityInput.sendKeys( String.valueOf(data.get("quantity")));
     }
 
     /**
@@ -89,19 +91,19 @@ public class OrderPage extends BasePage{
         calculateBtn.click();
     }
 
-    public void enterAddressInformation(String customerName, String street, String city, String state, String zip) {
-        customerNameInput.sendKeys(customerName);
-        streetAddressInput.sendKeys(street);
-        cityInput.sendKeys(city);
-        stateInput.sendKeys(state);
-        zipInput.sendKeys(zip);
+    public void enterAddressInformation(Map<String,String> data) {
+        customerNameInput.sendKeys(data.get("customer_name"));
+        streetAddressInput.sendKeys(data.get("street"));
+        cityInput.sendKeys(data.get("city"));
+        stateInput.sendKeys(data.get("state"));
+        zipInput.sendKeys(data.get("zip"));
     }
 
-    public void enterPaymentInformation(String cardName, String cardNumber, String expDate) {
-        WebElement card = driver.findElement(By.xpath("//input[@value='" + cardName + "']"));
+    public void enterPaymentInformation(Map<String,String> data) {
+        WebElement card = driver.findElement(By.xpath("//input[@value='" + data.get("card") + "']"));
         card.click();
-        cardNumberInput.sendKeys(cardName);
-        exprDateInput.sendKeys(expDate);
+        cardNumberInput.sendKeys(data.get("card_number"));
+        exprDateInput.sendKeys(data.get("expr_date"));
     }
 
     public void clickProcessBtn(){
@@ -111,7 +113,7 @@ public class OrderPage extends BasePage{
 
 
     private void verifySuccessOrderMessage(){
-        Assert.assertTrue(orderCreatedSuccessMsg.isDisplayed());
+        Assert.assertTrue(orderCreatedSuccessMsg.getText().trim().equals("New order has been successfully added."));
     }
 
 }
